@@ -35,6 +35,8 @@ namespace Torpedo3
         private Player player2;
 
         private int counter = 0;
+        String pName1;
+        String pName2;
 
         public PvP_Page()
         {
@@ -90,7 +92,7 @@ namespace Torpedo3
             int[,] shotingBoardPlayer = new int[xLength, yLength];
             Array.Copy(board, shotingBoardPlayer, board.Length);
 
-            player1 = new Player(boardPlayer, shotingBoardPlayer, "Játékos vagyok");
+            player1 = new Player(boardPlayer, shotingBoardPlayer, pName1);
 
             int[,] boardBot = new int[xLength, yLength]; ;
             Array.Copy(board, boardBot, board.Length);
@@ -98,7 +100,7 @@ namespace Torpedo3
             int[,] shotingBoardBot = new int[xLength, yLength]; ;
             Array.Copy(board, shotingBoardBot, board.Length);
 
-            player2 = new Player(boardBot, shotingBoardBot, "Játékos vagyok");
+            player2 = new Player(boardBot, shotingBoardBot, pName2);
 
         }
 
@@ -653,6 +655,17 @@ namespace Torpedo3
                 ownShips.Text = firstOwn + " " + secondOwn + " " + thirdOwn + " " + fourthOwn;
                 enemyShips.Text = firstEnemy + " " + secondEnemy + " " + thirdEnemy + " " + fourthEnemy;
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            pName1 = player1Name.Text;
+            pName2 = player2Name.Text;
+            names.Height = 0;
+            names.Width = 0;
+            names.Visibility = Visibility.Hidden;
+            player1Canvas.Visibility = Visibility.Visible;
+            player2Canvas.Visibility = Visibility.Visible;
         }
     }
 }

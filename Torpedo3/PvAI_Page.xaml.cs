@@ -31,6 +31,7 @@ namespace Torpedo3
         int[,] board;
         int presentTable;
         private Cell _cell;
+        String pName1 = "";
 
         private const int GameWidth = 10;
         private const int GameHeight = 10;
@@ -95,7 +96,7 @@ namespace Torpedo3
             int[,] shotingBoardPlayer = new int[xLength, yLength];
             Array.Copy(board, shotingBoardPlayer, board.Length);
 
-            player = new Player(boardPlayer, shotingBoardPlayer, "Játékos vagyok");
+            player = new Player(boardPlayer, shotingBoardPlayer, pName1);
 
             int[,] boardBot = new int[xLength, yLength]; ;
             Array.Copy(board, boardBot, board.Length);
@@ -103,7 +104,7 @@ namespace Torpedo3
             int[,] shotingBoardBot = new int[xLength, yLength]; ;
             Array.Copy(board, shotingBoardBot, board.Length);
 
-            bot = new Bot(boardBot, shotingBoardBot, "Bot vagyok");
+            bot = new Bot(boardBot, shotingBoardBot, "AI");
 
             botplace(bot);
 
@@ -887,6 +888,17 @@ namespace Torpedo3
         private void Page_KeyDown_1(object sender, KeyEventArgs e)
         {
             tbScore.Text = e.Key.ToString();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            pName1 = player1Name.Text;
+            names.Height = 0;
+            names.Width = 0;
+            names.Visibility = Visibility.Hidden;
+            playerCanvas.Visibility = Visibility.Visible;
+            botCanvas.Visibility = Visibility.Visible;
+            
         }
     }
 }
