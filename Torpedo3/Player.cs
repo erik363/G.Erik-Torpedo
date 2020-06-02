@@ -20,10 +20,25 @@ namespace Torpedo3
 
         public Coordinate Shoot2(int xCord, int yCord)
         {
-                Coordinate target = new Coordinate(xCord, yCord);
-    
-                    shootedPlaces.Add(target);
-                    return target;
+
+            Coordinate target = new Coordinate(xCord, yCord);
+
+            //bool alreadyShooted = false;
+            //foreach(var cord in shootedPlaces)
+            //{
+            //    if(cord.XCord == target.XCord && cord.YCord == target.YCord)
+            //    {
+            //        alreadyShooted = true;
+            //        break;
+            //    }
+            //}
+            //if(!alreadyShooted)
+            //{
+                
+            //}
+
+            shootedPlaces.Add(target);
+            return target;
                           
         }
     }

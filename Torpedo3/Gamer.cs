@@ -14,11 +14,14 @@ namespace Torpedo3
 
         public List<Ship> ships;
 
+        public List<Ship> remainShips;
+
         public Gamer(int[,] board, int[,] shootingBoard, string name)
         {
             Board = board;
             ShootingBoard = shootingBoard;
             ships = new List<Ship>();
+            remainShips = new List<Ship>();
             Name = name;
         }
 

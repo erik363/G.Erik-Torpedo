@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32.SafeHandles;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -105,6 +106,8 @@ namespace Torpedo3
             bot = new Bot(boardBot, shotingBoardBot, "Bot vagyok");
 
             botplace(bot);
+
+
         }
 
         public void botplace(Bot player)
@@ -146,7 +149,7 @@ namespace Torpedo3
                     {
 
                         player.ships.Add(ship);
-
+                        player.remainShips.Add(ship);
                         AddShipCoordinates(ship, count, ship.Direction, ship.X, ship.Y);
 
                         DrawShips(player);
@@ -478,7 +481,6 @@ namespace Torpedo3
 
 
 
-
                                     if (ship.coords[xCord].Count > 1)
                                     {
                                         ship.coords[xCord].Remove(yCord);
@@ -551,12 +553,9 @@ namespace Torpedo3
             return gameOver;
         }
 
-        public void PlaceShips(Gamer player, int x = 0, int y = 0, int count = 0)
+        public void PlaceShips(Gamer player, int x = 0, int y = 0, int count = 0, int direction = 0)
         {
             bool isBot = false;
-
-
-            int direction = 0;
 
             if (player is Player)
             {
@@ -592,7 +591,7 @@ namespace Torpedo3
                 {
 
                     player.ships.Add(ship);
-
+                    player.remainShips.Add(ship);
                     AddShipCoordinates(ship, count, ship.Direction, ship.X, ship.Y);
 
                     DrawShips(player);
@@ -779,7 +778,6 @@ namespace Torpedo3
                 }
                 else
                 {
-  
                     Random random = new Random();
                     x = random.Next(0, board.GetLength(0));
                     y = random.Next(0, board.GetLength(1));
@@ -798,12 +796,26 @@ namespace Torpedo3
             if (counter < sizes.Length)
             {
                 tbScore.Text = x.ToString();
-
                 PlaceShips(player, (int)x, (int)y, counter);
                 counter++;
             }
 
         }
+
+        private void playerCanvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            double x = e.GetPosition(playerCanvas).X / 30;
+            double y = e.GetPosition(playerCanvas).Y / 30;
+
+            if (counter < sizes.Length)
+            {
+                tbScore.Text = x.ToString();
+                PlaceShips(player, (int)x, (int)y, counter, 1);
+                counter++;
+            }
+        }
+
+
 
         private void playerCanvasS_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -826,7 +838,6 @@ namespace Torpedo3
                 PrintingShootingBoard(player);
                 PrintingShootingBoard(bot);
                 counter++;
-
             }
             else
             {
@@ -847,15 +858,15 @@ namespace Torpedo3
                 String firstEnemy = "0", secondEnemy = "0", thirdEnemy = "0", fourthEnemy = "0";
                 try
                 {
-                    firstOwn = player.ships[0].Size.ToString();
-                    secondOwn = player.ships[1].Size.ToString();
-                    thirdOwn = player.ships[2].Size.ToString();
-                    fourthOwn = player.ships[3].Size.ToString();
+                    firstOwn = player.remainShips[0].Size.ToString();
+                    secondOwn = player.remainShips[1].Size.ToString();
+                    thirdOwn = player.remainShips[2].Size.ToString();
+                    fourthOwn = player.remainShips[3].Size.ToString();
 
-                    firstEnemy = bot.ships[0].Size.ToString();
-                    secondEnemy = bot.ships[1].Size.ToString();
-                    thirdEnemy = bot.ships[2].Size.ToString();
-                    fourthEnemy = bot.ships[3].Size.ToString();
+                    firstEnemy = bot.remainShips[0].Size.ToString();
+                    secondEnemy = bot.remainShips[1].Size.ToString();
+                    thirdEnemy = bot.remainShips[2].Size.ToString();
+                    fourthEnemy = bot.remainShips[3].Size.ToString();
 
                 }
                 catch
@@ -869,6 +880,13 @@ namespace Torpedo3
                 
 
             }
+        }
+
+
+
+        private void Page_KeyDown_1(object sender, KeyEventArgs e)
+        {
+            tbScore.Text = e.Key.ToString();
         }
     }
 }

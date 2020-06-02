@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -292,13 +293,9 @@ namespace Torpedo3
             return gameOver;
         }
 
-        public void PlaceShips(Gamer player, int x = 0, int y = 0, int count = 0)
+        public void PlaceShips(Gamer player, int x = 0, int y = 0, int count = 0, int direction = 0)
         {
             bool isBot = false;
-
-
-            int direction = 0;
-
             if (player is Player)
             {
             }
@@ -537,16 +534,11 @@ namespace Torpedo3
             if(counter%2 == 1 && counter < 10)
             {
                 tbScore.Text = x.ToString();
-
                 PlaceShips(player2, (int)x, (int)y, counter);
                 player2Canvas.Visibility = Visibility.Hidden;
                 player1Canvas.Visibility = Visibility.Visible;
-                counter++;
-           
-
+                counter++;              
             }
-
-
         }
 
         private void playerCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -556,16 +548,111 @@ namespace Torpedo3
             if (counter % 2 == 0 && counter < 10)
             {
                 tbScore.Text = x.ToString();
-
                 PlaceShips(player1, (int)x, (int)y, counter);
-
                 player1Canvas.Visibility = Visibility.Hidden;
                 player2Canvas.Visibility = Visibility.Visible;
                 counter++;
                 //tbScore.Text = "2";
+            }
+        }
 
+        private void player1Canvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            double x = e.GetPosition(player1Canvas).X / 30;
+            double y = e.GetPosition(player1Canvas).Y / 30;
+            if (counter % 2 == 0 && counter < 10)
+            {
+                tbScore.Text = x.ToString();
+                PlaceShips(player1, (int)x, (int)y, counter, 1);
+                player1Canvas.Visibility = Visibility.Hidden;
+                player2Canvas.Visibility = Visibility.Visible;
+                counter++;
+                //tbScore.Text = "2";
             }
 
+        }
+
+        private void player2Canvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            double x = e.GetPosition(player2Canvas).X / 30;
+            double y = e.GetPosition(player2Canvas).Y / 30;
+            if (counter % 2 == 1 && counter < 10)
+            {
+                tbScore.Text = x.ToString();
+                PlaceShips(player2, (int)x, (int)y, counter, 1);
+                player2Canvas.Visibility = Visibility.Hidden;
+                player1Canvas.Visibility = Visibility.Visible;
+                counter++;
+            }
+
+        }
+
+        private void player1CanvasS_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if(counter%2 == 0){
+                player1Canvas.Visibility = Visibility.Hidden;
+                double x = e.GetPosition(player1CanvasS).X / 30;
+                double y = e.GetPosition(player1CanvasS).Y / 30;
+                StartShooting(player1, player2, (int)x, (int)y);
+                counter++;
+                PrintingShootingBoard(player1, 1);
+                PrintingShootingBoard(player2, 2);
+                String firstOwn = "0", secondOwn = "0", thirdOwn = "0", fourthOwn = "0";
+                String firstEnemy = "0", secondEnemy = "0", thirdEnemy = "0", fourthEnemy = "0";
+                try
+                {
+                    firstOwn = player1.remainShips[0].Size.ToString();
+                    secondOwn = player1.remainShips[1].Size.ToString();
+                    thirdOwn = player1.remainShips[2].Size.ToString();
+                    fourthOwn = player1.remainShips[3].Size.ToString();
+
+                    firstEnemy = player2.remainShips[0].Size.ToString();
+                    secondEnemy = player2.remainShips[1].Size.ToString();
+                    thirdEnemy = player2.remainShips[2].Size.ToString();
+                    fourthEnemy = player2.remainShips[3].Size.ToString();
+
+                }
+                catch
+                {
+
+                }
+                ownShips.Text = firstOwn + " " + secondOwn + " " + thirdOwn + " " + fourthOwn;
+                enemyShips.Text = firstEnemy + " " + secondEnemy + " " + thirdEnemy + " " + fourthEnemy;
+            }        
+        }
+
+        private void player2CanvasS_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (counter % 2 == 1)
+            {
+                double x = e.GetPosition(player2CanvasS).X / 30;
+                double y = e.GetPosition(player2CanvasS).Y / 30;
+                StartShooting(player2, player1, (int)x, (int)y);
+                counter++;
+                PrintingShootingBoard(player1, 1);
+                PrintingShootingBoard(player2, 2);
+                String firstOwn = "0", secondOwn = "0", thirdOwn = "0", fourthOwn = "0";
+                String firstEnemy = "0", secondEnemy = "0", thirdEnemy = "0", fourthEnemy = "0";
+                try
+                {
+                    firstOwn = player1.remainShips[0].Size.ToString();
+                    secondOwn = player1.remainShips[1].Size.ToString();
+                    thirdOwn = player1.remainShips[2].Size.ToString();
+                    fourthOwn = player1.remainShips[3].Size.ToString();
+
+                    firstEnemy = player2.remainShips[0].Size.ToString();
+                    secondEnemy = player2.remainShips[1].Size.ToString();
+                    thirdEnemy = player2.remainShips[2].Size.ToString();
+                    fourthEnemy = player2.remainShips[3].Size.ToString();
+
+                }
+                catch
+                {
+
+                }
+                ownShips.Text = firstOwn + " " + secondOwn + " " + thirdOwn + " " + fourthOwn;
+                enemyShips.Text = firstEnemy + " " + secondEnemy + " " + thirdEnemy + " " + fourthEnemy;
+            }
         }
     }
 }

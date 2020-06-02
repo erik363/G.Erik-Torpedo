@@ -15,6 +15,7 @@
             </StackPanel>
             <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
         </StackPanel>
-
+        
     </Grid>
+    
 </Window>
