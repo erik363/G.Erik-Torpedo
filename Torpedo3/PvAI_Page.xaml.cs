@@ -23,7 +23,8 @@ namespace Torpedo3
     /// </summary>
     public partial class PvAI_Page : Page
     {
-
+        int hits1 = 0;
+        int hits2 = 0;
         //int[] sizes = { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 };
         int[] sizes = { 4, 3, 2, 1, 1 };
         Ship ship;
@@ -32,7 +33,7 @@ namespace Torpedo3
         int presentTable;
         private Cell _cell;
         String pName1 = "";
-
+        int rounds = 0;
         private const int GameWidth = 10;
         private const int GameHeight = 10;
 
@@ -47,8 +48,6 @@ namespace Torpedo3
             InitializeComponent();
 
             InitGame();
-
-            BeginGame();
         }
 
         private void InitGame()
@@ -190,6 +189,7 @@ namespace Torpedo3
                         {
                             _cell = new Cell(i, j);
                             DrawPoint(_cell, Brushes.Black, botCanvasS);
+                            
                         }
                     }
                     else
@@ -209,6 +209,7 @@ namespace Torpedo3
                         {
                             _cell = new Cell(i, j);
                             DrawPoint(_cell, Brushes.Black, playerCanvasS);
+
                         }
                     }
                 }
@@ -219,7 +220,7 @@ namespace Torpedo3
         {
             bool gameOver = false;
             Ship sankedShip = null;
-
+            count.Text = " : " + ++rounds;
             Coordinate target = attacker.Shoot2(x, y);
             Console.WriteLine(attacker.Name + " LŐTT A: " + target.XCord + " , " + target.YCord + " -ra");
 
@@ -268,7 +269,8 @@ namespace Torpedo3
                                 if (yCord == target.YCord)
                                 {
                                     attacker.ShootingBoard[target.XCord, target.YCord] = 7;
-
+                                    
+                                    play1hits.Text = "Találat: " + ++hits1;
                                     if (shipHitPoint > 1)
                                     {
                                         if (ship.coords[xCord].Count > 1)
@@ -302,7 +304,7 @@ namespace Torpedo3
                                 if (xCord == target.XCord)
                                 {
                                     attacker.ShootingBoard[target.XCord, target.YCord] = 7;
-
+                                    play1hits.Text = "Találat: " + ++hits1;
                                     if (ship.coords[xCord].Count > 1)
                                     {
                                         ship.coords[xCord].Remove(yCord);
@@ -415,6 +417,7 @@ namespace Torpedo3
                                 {
 
                                     attacker.ShootingBoard[target.XCord, target.YCord] = 7;
+                                    play2hits.Text = "Találat: " + ++hits2;
 
                                     if (attacker is Bot)
                                     {
@@ -479,7 +482,7 @@ namespace Torpedo3
                                 {
 
                                     attacker.ShootingBoard[target.XCord, target.YCord] = 7;
-
+                                    play2hits.Text = "Találat: " + ++hits2;
 
 
                                     if (ship.coords[xCord].Count > 1)
@@ -799,8 +802,13 @@ namespace Torpedo3
                 tbScore.Text = x.ToString();
                 PlaceShips(player, (int)x, (int)y, counter);
                 counter++;
+                if (counter == sizes.Length)
+                {
+                    playerCanvasS.Visibility = Visibility.Visible;
+                    botCanvasS.Visibility = Visibility.Visible;
+                        
+                }
             }
-
         }
 
         private void playerCanvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -898,7 +906,10 @@ namespace Torpedo3
             names.Visibility = Visibility.Hidden;
             playerCanvas.Visibility = Visibility.Visible;
             botCanvas.Visibility = Visibility.Visible;
+            BeginGame();
+            nameLabel.Text = player.Name + " hajói:";
             
+
         }
     }
 }

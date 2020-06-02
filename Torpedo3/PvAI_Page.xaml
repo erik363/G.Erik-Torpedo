@@ -21,9 +21,16 @@
             
             <Canvas x:Name="botCanvas" Height="300" Width="300" Background="AliceBlue" Margin="1,1,1,1" Visibility="Hidden"/>
             <StackPanel Height="209" Width="100">
-
+                <TextBlock x:Name="nameLabel" Text="Player1 hajói:"/>
                 <TextBlock x:Name ="ownShips"/>
+                <TextBlock x:Name ="play1hits"/>
+                <TextBlock Text="AI hajói:"/>
+                <TextBlock x:Name ="play2hits"/>
                 <TextBlock x:Name ="enemyShips"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Körök száma"/>
+                    <TextBlock x:Name ="count"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal">

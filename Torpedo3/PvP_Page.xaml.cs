@@ -21,13 +21,15 @@ namespace Torpedo3
     /// </summary>
     public partial class PvP_Page : Page
     {
+        int hits1 = 0;
+        int hits2= 0;
         int[] sizes = { 4, 4, 3, 3, 2, 2, 1, 1, 1, 1 };
         Ship ship;
         List<Ship> ships;
         int[,] board;
         int presentTable;
         private Cell _cell;
-
+        int rounds = 0;
         private const int GameWidth = 10;
         private const int GameHeight = 10;
 
@@ -44,7 +46,6 @@ namespace Torpedo3
 
             InitGame();
 
-            BeginGame();
         }
 
         private void InitGame()
@@ -157,7 +158,7 @@ namespace Torpedo3
         {
             bool gameOver = false;
             Ship sankedShip = null;
-
+            count.Text = " : " + (int)++rounds/2;
             Coordinate target = attacker.Shoot2(x, y);
             Console.WriteLine(attacker.Name + " LŐTT A: " + target.XCord + " , " + target.YCord + " -ra");
 
@@ -206,6 +207,10 @@ namespace Torpedo3
                                 if (yCord == target.YCord)
                                 {
                                     attacker.ShootingBoard[target.XCord, target.YCord] = 7;
+                                    if (attacker.Name.Equals(pName1))                                 
+                                        play1hits.Text = "Találat: " + ++hits1;
+                                    else
+                                        play2hits.Text = "Találat: " + ++hits2;
 
                                     if (shipHitPoint > 1)
                                     {
@@ -240,6 +245,10 @@ namespace Torpedo3
                                 if (xCord == target.XCord)
                                 {
                                     attacker.ShootingBoard[target.XCord, target.YCord] = 7;
+                                    if (attacker.Name.Equals(pName1))
+                                        play1hits.Text = "Találat: " + ++hits1;
+                                    else
+                                        play2hits.Text = "Találat: " + ++hits2;
 
                                     if (ship.coords[xCord].Count > 1)
                                     {
@@ -547,7 +556,7 @@ namespace Torpedo3
         {
             double x = e.GetPosition(player1Canvas).X / 30;
             double y = e.GetPosition(player1Canvas).Y / 30;
-            if (counter % 2 == 0 && counter < 10)
+            if (counter % 2 == 0 && counter < sizes.Length)
             {
                 tbScore.Text = x.ToString();
                 PlaceShips(player1, (int)x, (int)y, counter);
@@ -556,13 +565,18 @@ namespace Torpedo3
                 counter++;
                 //tbScore.Text = "2";
             }
+            if (counter == sizes.Length)
+            {
+                player1CanvasS.Visibility = Visibility.Visible;
+                player2CanvasS.Visibility = Visibility.Visible;
+            }
         }
 
         private void player1Canvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             double x = e.GetPosition(player1Canvas).X / 30;
             double y = e.GetPosition(player1Canvas).Y / 30;
-            if (counter % 2 == 0 && counter < 10)
+            if (counter % 2 == 0 && counter < sizes.Length)
             {
                 tbScore.Text = x.ToString();
                 PlaceShips(player1, (int)x, (int)y, counter, 1);
@@ -666,6 +680,10 @@ namespace Torpedo3
             names.Visibility = Visibility.Hidden;
             player1Canvas.Visibility = Visibility.Visible;
             player2Canvas.Visibility = Visibility.Visible;
+            BeginGame();
+            nameLabel1.Text = player1.Name + " hajói:";
+            nameLabel2.Text = player2.Name + " hajói:";
+           
         }
     }
 }

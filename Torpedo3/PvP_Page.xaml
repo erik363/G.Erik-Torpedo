@@ -18,8 +18,16 @@
             </StackPanel>
             <Canvas x:Name="player2Canvas" Height="300" Width="300" Background="AliceBlue" MouseLeftButtonDown="playerCanvasS_MouseLeftButtonDown" Margin="1,1,1,1" MouseRightButtonDown="player2Canvas_MouseRightButtonDown" Visibility="Hidden"/>
             <StackPanel Height="209" Width="100">
+                <TextBlock x:Name="nameLabel1" Text="Player1 hajói:"/>
                 <TextBlock x:Name ="ownShips"/>
+                <TextBlock x:Name ="play1hits"/>
+                <TextBlock x:Name="nameLabel2" Text="Player1 hajói:"/>
                 <TextBlock x:Name ="enemyShips"/>
+                <TextBlock x:Name ="play2hits"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Körök száma"/>
+                    <TextBlock x:Name ="count"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
