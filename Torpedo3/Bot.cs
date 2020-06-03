@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Microsoft.Build.Tasks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using Message = Microsoft.Build.Tasks.Message;
 
 namespace Torpedo3
 {
@@ -287,11 +290,8 @@ namespace Torpedo3
         public Coordinate ShootIfShipNotSankButMiss(string direction, Coordinate target)
         {
             if (direction.Equals("right"))
-            {
-             
-
-       
-                if (catchedPoints[0].YCord - 1 < 0)
+            {                  
+                if (catchedPoints[0].YCord - 1 > 0)
                 {
                     target =
                         new Coordinate(catchedPoints[catchedPoints.Count - 1].XCord,
@@ -345,6 +345,8 @@ namespace Torpedo3
             }
             return null;
         }
+
+        
 
     }
 }

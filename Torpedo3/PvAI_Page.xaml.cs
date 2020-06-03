@@ -26,27 +26,23 @@ namespace Torpedo3
     /// </summary>
     public partial class PvAI_Page : Page
     {
-        int hits1 = 0;
-        int hits2 = 0;
-        //int[] sizes = { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 };
-        int[] sizes = { 4, 3, 2, 1, 1 };
         Ship ship;
-        List<Ship> ships;
-        int[,] board;
-        int presentTable;
         List<Cell> alreadyShooted;
+        private Player player;
+        private Bot bot;
         private Cell _cell;
         String pName1 = "";
+        int hits1 = 0;
+        int hits2 = 0;
+        int[,] board;
+        //int[] sizes = { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 };
+        int[] sizes = { 4, 3, 2, 1, 1 };
         int rounds = 0;
         private const int GameWidth = 10;
         private const int GameHeight = 10;
-
-        private Player player;
-        private Bot bot;
-
         private int counter = 0;
-
         int who = -1;
+
         public PvAI_Page()
         {
             InitializeComponent();
@@ -58,7 +54,6 @@ namespace Torpedo3
         {
             playerCanvas.Children.Clear();
             botCanvas.Children.Clear();
-
         }
 
         private void DrawPoint(Cell position, Brush brush, Canvas actCanvas)
@@ -80,7 +75,6 @@ namespace Torpedo3
             int yLength = 10;
 
             board = new int[xLength, yLength];
-            ships = new List<Ship>();
 
             for (int i = 0; i < xLength; i++)
             {
@@ -124,7 +118,7 @@ namespace Torpedo3
 
                 int direction = 0;
 
-                Thread.Sleep(1000);
+                Thread.Sleep(200);
                 Random random = new Random();
                 x = random.Next(0, board.GetLength(0));
                 Thread.Sleep(2);
@@ -137,7 +131,6 @@ namespace Torpedo3
                 if (player.ships.Count == 0)
                 {
                     AddFirstShip(ship, count, player);
-
                 }
                 else
                 {
@@ -155,7 +148,6 @@ namespace Torpedo3
                         player.ships.Add(ship);
                         player.remainShips.Add(ship);
                         AddShipCoordinates(ship, count, ship.Direction, ship.X, ship.Y);
-
                         DrawShips(player);
                         PrintingBoard(player);
                     }
@@ -167,7 +159,6 @@ namespace Torpedo3
 
             }
         }
-
 
         public void PrintingShootingBoard(Gamer player)
         {
@@ -192,8 +183,7 @@ namespace Torpedo3
                         else if (actual == 7)
                         {
                             _cell = new Cell(i, j);
-                            DrawPoint(_cell, Brushes.Black, botCanvasS);
-                            
+                            DrawPoint(_cell, Brushes.Black, botCanvasS);                          
                         }
                     }
                     else
@@ -213,7 +203,6 @@ namespace Torpedo3
                         {
                             _cell = new Cell(i, j);
                             DrawPoint(_cell, Brushes.Black, playerCanvasS);
-
                         }
                     }
                 }
@@ -263,8 +252,6 @@ namespace Torpedo3
                 }
                 foreach (var xCord in ship.coords.Keys)
                 {
-
-
                     foreach (var yCord in ship.coords[xCord])
                     {
                         if (fixCoordinate == targetingFixCoordinate)
@@ -273,9 +260,9 @@ namespace Torpedo3
                             {
                                 if (yCord == target.YCord)
                                 {
-                                    attacker.ShootingBoard[target.XCord, target.YCord] = 7;
-                                    
+                                    attacker.ShootingBoard[target.XCord, target.YCord] = 7;                                 
                                     play1hits.Text = "Találat: " + ++hits1;
+
                                     if (shipHitPoint > 1)
                                     {
                                         if (ship.coords[xCord].Count > 1)
@@ -310,6 +297,7 @@ namespace Torpedo3
                                 {
                                     attacker.ShootingBoard[target.XCord, target.YCord] = 7;
                                     play1hits.Text = "Találat: " + ++hits1;
+
                                     if (ship.coords[xCord].Count > 1)
                                     {
                                         ship.coords[xCord].Remove(yCord);
@@ -563,10 +551,7 @@ namespace Torpedo3
         {
             bool isBot = false;
 
-            if (player is Player)
-            {
-            }
-            else
+            if (player is Bot)
             {
                 Random random = new Random();
                 x = random.Next(0, board.GetLength(0));
@@ -605,7 +590,6 @@ namespace Torpedo3
                 }
                 else
                 {
-
                     count--;
                 }
             }
@@ -641,8 +625,7 @@ namespace Torpedo3
                     }
                 }
             }
-
-            return true;
+            return canPlace;
         }
 
 
@@ -686,9 +669,6 @@ namespace Torpedo3
         public void AddFirstShip(Ship ship, int count, Gamer player)
         {
             ship = AddShipCoordinates(ship, count, ship.Direction, ship.X, ship.Y);
-
-
-
             player.ships.Add(ship);
 
             DrawShips(player);
@@ -729,12 +709,8 @@ namespace Torpedo3
                             DrawPoint(_cell, Brushes.Red, playerCanvas);
                         }
                     }
-
-
                 }
-
             }
-
         }
 
         public List<int> GetMarkedCoords(int count, Ship ship)
@@ -779,7 +755,6 @@ namespace Torpedo3
 
                 if (!isBot)
                 {
-
                     direction = Convert.ToInt32(Console.ReadLine());
                 }
                 else
@@ -807,8 +782,7 @@ namespace Torpedo3
                 if (counter == sizes.Length)
                 {
                     playerCanvasS.Visibility = Visibility.Visible;
-                    botCanvasS.Visibility = Visibility.Visible;
-                        
+                    botCanvasS.Visibility = Visibility.Visible;                      
                 }
             }
         }
@@ -837,7 +811,6 @@ namespace Torpedo3
             {
                 if (i.X == (int)x && i.Y == (int)y)
                     contains = true;
-
             }
             if (!contains)
             {
@@ -849,14 +822,11 @@ namespace Torpedo3
                     {
                         StartShooting(player, bot, (int)x, (int)y);
                         StartShooting(bot, player);
-
-
                     }
                     else
                     {
                         StartShooting(bot, player);
                         StartShooting(player, bot, (int)x, (int)y);
-
                     }
                     PrintingShootingBoard(player);
                     PrintingShootingBoard(bot);
@@ -868,13 +838,11 @@ namespace Torpedo3
                     {
                         StartShooting(player, bot, (int)x, (int)y);
                         StartShooting(bot, player);
-
                     }
                     else
                     {
                         StartShooting(bot, player);
                         StartShooting(player, bot, (int)x, (int)y);
-
                     }
                     counter++;
                     PrintingShootingBoard(player);
@@ -894,9 +862,7 @@ namespace Torpedo3
                         fourthEnemy = bot.remainShips[3].Size.ToString();
                     }
                     catch
-                    {
-
-                    }
+                    {}
                     ownShips.Text = firstOwn + " " + secondOwn + " " + thirdOwn + " " + fourthOwn;
                     enemyShips.Text = firstEnemy + " " + secondEnemy + " " + thirdEnemy + " " + fourthEnemy;
 
@@ -905,7 +871,6 @@ namespace Torpedo3
                     {
                         GameWon();
                     }
-
                 }
             }
         }
