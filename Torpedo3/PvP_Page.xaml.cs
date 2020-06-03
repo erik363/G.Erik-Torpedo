@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -634,7 +636,24 @@ namespace Torpedo3
                 }
                 ownShips.Text = firstOwn + " " + secondOwn + " " + thirdOwn + " " + fourthOwn;
                 enemyShips.Text = firstEnemy + " " + secondEnemy + " " + thirdEnemy + " " + fourthEnemy;
-            }        
+            }
+            if (hits1 == 11 || hits2 == 11)
+                GameWon();
+        }
+
+        private void GameWon()
+        {
+            AllCanvas.Visibility = Visibility.Hidden;
+            String JSONtxt = File.ReadAllText(@"d:\test.json");
+            var accounts = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<Data>>(JSONtxt);
+            List<Data> temp = accounts.ToList();
+            temp.Add(new Data
+            {
+                Name1 = player1.Name,
+                Name2 = player2.Name,
+                Rounds = rounds
+            });
+            File.WriteAllText(@"d:\test.json", JsonConvert.SerializeObject(temp));
         }
 
         private void player2CanvasS_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -669,6 +688,8 @@ namespace Torpedo3
                 ownShips.Text = firstOwn + " " + secondOwn + " " + thirdOwn + " " + fourthOwn;
                 enemyShips.Text = firstEnemy + " " + secondEnemy + " " + thirdEnemy + " " + fourthEnemy;
             }
+            if (hits1 == 11 || hits2 == 11)
+                GameWon();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

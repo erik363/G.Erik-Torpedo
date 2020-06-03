@@ -8,7 +8,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PvP_Page">
     
-    <StackPanel Orientation="Vertical">
+    <StackPanel Orientation="Vertical" x:Name="AllCanvas">
         <StackPanel Orientation="Horizontal">
             <Canvas x:Name="player1Canvas" Height="300" Width="300" Background="AliceBlue" MouseLeftButtonDown="playerCanvas_MouseLeftButtonDown" Margin="1,1,1,1" MouseRightButtonDown="player1Canvas_MouseRightButtonDown" Visibility="Hidden"/>
             <StackPanel Orientation="Vertical" x:Name="names">

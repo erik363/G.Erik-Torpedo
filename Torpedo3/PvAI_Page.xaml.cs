@@ -1,6 +1,9 @@
 ﻿using Microsoft.Win32.SafeHandles;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -418,7 +421,6 @@ namespace Torpedo3
 
                                     attacker.ShootingBoard[target.XCord, target.YCord] = 7;
                                     play2hits.Text = "Találat: " + ++hits2;
-
                                     if (attacker is Bot)
                                     {
                                         Bot bot = (Bot)attacker;
@@ -483,8 +485,6 @@ namespace Torpedo3
 
                                     attacker.ShootingBoard[target.XCord, target.YCord] = 7;
                                     play2hits.Text = "Találat: " + ++hits2;
-
-
                                     if (ship.coords[xCord].Count > 1)
                                     {
                                         ship.coords[xCord].Remove(yCord);
@@ -838,11 +838,14 @@ namespace Torpedo3
                 {
                     StartShooting(player, bot, (int)x, (int)y);
                     StartShooting(bot, player);
+
+                    
                 }
                 else
                 {
                     StartShooting(bot, player);
                     StartShooting(player, bot, (int)x, (int)y);
+
                 }
                 PrintingShootingBoard(player);
                 PrintingShootingBoard(bot);
@@ -854,11 +857,13 @@ namespace Torpedo3
                 {
                     StartShooting(player, bot, (int)x, (int)y);
                     StartShooting(bot, player);
+
                 }
                 else
                 {
                     StartShooting(bot, player);
                     StartShooting(player, bot, (int)x, (int)y);
+
                 }
                 counter++;
                 PrintingShootingBoard(player);
@@ -876,7 +881,6 @@ namespace Torpedo3
                     secondEnemy = bot.remainShips[1].Size.ToString();
                     thirdEnemy = bot.remainShips[2].Size.ToString();
                     fourthEnemy = bot.remainShips[3].Size.ToString();
-
                 }
                 catch
                 {
@@ -886,9 +890,27 @@ namespace Torpedo3
                 enemyShips.Text = firstEnemy + " " + secondEnemy + " " + thirdEnemy + " " + fourthEnemy;
 
                 List<string> asd = new List<string>();
-                
+                if(hits1 == 11 || hits2 == 11)
+                {
+                    GameWon();
+                }
 
             }
+        }
+
+        private void GameWon()
+        {
+            AllCanvas.Visibility = Visibility.Hidden;
+            String JSONtxt = File.ReadAllText(@"d:\test.json");
+            var accounts = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<Data>>(JSONtxt);
+            List<Data> temp = accounts.ToList();
+            temp.Add(new Data
+            {
+                Name1 = player.Name,
+                Name2 = bot.Name,
+                Rounds = rounds
+            });
+            File.WriteAllText(@"d:\test.json", JsonConvert.SerializeObject(temp));
         }
 
 
@@ -908,8 +930,6 @@ namespace Torpedo3
             botCanvas.Visibility = Visibility.Visible;
             BeginGame();
             nameLabel.Text = player.Name + " hajói:";
-            
-
         }
     }
 }

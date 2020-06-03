@@ -10,7 +10,7 @@
       >
 
 
-    <StackPanel Orientation="Vertical" KeyDown="Page_KeyDown_1">
+    <StackPanel Orientation="Vertical" KeyDown="Page_KeyDown_1" x:Name="AllCanvas">
         <StackPanel Orientation="Horizontal">
             <Canvas x:Name="playerCanvas" Height="300" Width="300" Background="AliceBlue" MouseLeftButtonDown="playerCanvas_MouseLeftButtonDown" Margin="1,1,1,1" MouseRightButtonDown="playerCanvas_MouseRightButtonDown" Visibility="Hidden"/>
             <StackPanel Orientation="Vertical" x:Name="names">
@@ -18,7 +18,7 @@
                 <!--TextBox x:Name="player2Name" Text="Név2" Width="76" Height="44"/-->
                 <Button x:Name="Button" Content="Play" Click="Button_Click" Width="77"></Button>
             </StackPanel>
-            
+
             <Canvas x:Name="botCanvas" Height="300" Width="300" Background="AliceBlue" Margin="1,1,1,1" Visibility="Hidden"/>
             <StackPanel Height="209" Width="100">
                 <TextBlock x:Name="nameLabel" Text="Player1 hajói:"/>
@@ -40,5 +40,4 @@
         </StackPanel>
         <TextBlock x:Name ="tbScore"/>
     </StackPanel>
-
 </Page>

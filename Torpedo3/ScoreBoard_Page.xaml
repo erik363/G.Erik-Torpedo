@@ -9,6 +9,15 @@
       Title="ScoreBoard_Page">
 
     <Grid>
-        
+        <ListView HorizontalAlignment="Left" Height="416" Margin="30,34,0,0" VerticalAlignment="Top" Width="596" x:Name="lista">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name1" DisplayMemberBinding="{Binding Name1}"/>
+                    <GridViewColumn Header="Name2" DisplayMemberBinding="{Binding Name2}"/>
+                    <GridViewColumn Header="Rounds" DisplayMemberBinding="{Binding Rounds}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
     </Grid>
 </Page>
