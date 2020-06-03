@@ -32,6 +32,8 @@ namespace Torpedo3
         int presentTable;
         private Cell _cell;
         int rounds = 0;
+        List<Cell> alreadyShooted;
+        List<Cell> alreadyShooted2;
         private const int GameWidth = 10;
         private const int GameHeight = 10;
 
@@ -105,6 +107,8 @@ namespace Torpedo3
 
             player2 = new Player(boardBot, shotingBoardBot, pName2);
 
+            alreadyShooted = new List<Cell>();
+            alreadyShooted2 = new List<Cell>();
         }
 
         public void PrintingShootingBoard(Gamer player, int s)
@@ -163,6 +167,10 @@ namespace Torpedo3
             count.Text = " : " + (int)++rounds/2;
             Coordinate target = attacker.Shoot2(x, y);
             Console.WriteLine(attacker.Name + " LŐTT A: " + target.XCord + " , " + target.YCord + " -ra");
+            if (attacker.Name.Equals(pName1))
+                alreadyShooted.Add(new Cell(x,y));
+            else
+                alreadyShooted2.Add(new Cell(x, y));
 
             foreach (var ship in defender.ships)
             {
@@ -607,38 +615,50 @@ namespace Torpedo3
 
         private void player1CanvasS_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if(counter%2 == 0){
-                player1Canvas.Visibility = Visibility.Hidden;
-                double x = e.GetPosition(player1CanvasS).X / 30;
-                double y = e.GetPosition(player1CanvasS).Y / 30;
-                StartShooting(player1, player2, (int)x, (int)y);
-                counter++;
-                PrintingShootingBoard(player1, 1);
-                PrintingShootingBoard(player2, 2);
-                String firstOwn = "0", secondOwn = "0", thirdOwn = "0", fourthOwn = "0";
-                String firstEnemy = "0", secondEnemy = "0", thirdEnemy = "0", fourthEnemy = "0";
-                try
-                {
-                    firstOwn = player1.remainShips[0].Size.ToString();
-                    secondOwn = player1.remainShips[1].Size.ToString();
-                    thirdOwn = player1.remainShips[2].Size.ToString();
-                    fourthOwn = player1.remainShips[3].Size.ToString();
+            double x = e.GetPosition(player1CanvasS).X / 30;
+            double y = e.GetPosition(player1CanvasS).Y / 30;
+            bool contains = false;
+            foreach (var i in alreadyShooted)
+            {
+                if (i.X == (int)x && i.Y == (int)y)
+                    contains = true;
 
-                    firstEnemy = player2.remainShips[0].Size.ToString();
-                    secondEnemy = player2.remainShips[1].Size.ToString();
-                    thirdEnemy = player2.remainShips[2].Size.ToString();
-                    fourthEnemy = player2.remainShips[3].Size.ToString();
-
-                }
-                catch
-                {
-
-                }
-                ownShips.Text = firstOwn + " " + secondOwn + " " + thirdOwn + " " + fourthOwn;
-                enemyShips.Text = firstEnemy + " " + secondEnemy + " " + thirdEnemy + " " + fourthEnemy;
             }
-            if (hits1 == 11 || hits2 == 11)
-                GameWon();
+            if (!contains)
+            {
+                if (counter % 2 == 0)
+                {
+                    player1Canvas.Visibility = Visibility.Hidden;
+                    
+                    StartShooting(player1, player2, (int)x, (int)y);
+                    counter++;
+                    PrintingShootingBoard(player1, 1);
+                    PrintingShootingBoard(player2, 2);
+                    String firstOwn = "0", secondOwn = "0", thirdOwn = "0", fourthOwn = "0";
+                    String firstEnemy = "0", secondEnemy = "0", thirdEnemy = "0", fourthEnemy = "0";
+                    try
+                    {
+                        firstOwn = player1.remainShips[0].Size.ToString();
+                        secondOwn = player1.remainShips[1].Size.ToString();
+                        thirdOwn = player1.remainShips[2].Size.ToString();
+                        fourthOwn = player1.remainShips[3].Size.ToString();
+
+                        firstEnemy = player2.remainShips[0].Size.ToString();
+                        secondEnemy = player2.remainShips[1].Size.ToString();
+                        thirdEnemy = player2.remainShips[2].Size.ToString();
+                        fourthEnemy = player2.remainShips[3].Size.ToString();
+
+                    }
+                    catch
+                    {
+
+                    }
+                    ownShips.Text = firstOwn + " " + secondOwn + " " + thirdOwn + " " + fourthOwn;
+                    enemyShips.Text = firstEnemy + " " + secondEnemy + " " + thirdEnemy + " " + fourthEnemy;
+                }
+                if (hits1 == 11 || hits2 == 11)
+                    GameWon();
+            }
         }
 
         private void GameWon()
@@ -658,38 +678,49 @@ namespace Torpedo3
 
         private void player2CanvasS_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (counter % 2 == 1)
+            double x = e.GetPosition(player2CanvasS).X / 30;
+            double y = e.GetPosition(player2CanvasS).Y / 30;
+            bool contains = false;
+            foreach (var i in alreadyShooted2)
             {
-                double x = e.GetPosition(player2CanvasS).X / 30;
-                double y = e.GetPosition(player2CanvasS).Y / 30;
-                StartShooting(player2, player1, (int)x, (int)y);
-                counter++;
-                PrintingShootingBoard(player1, 1);
-                PrintingShootingBoard(player2, 2);
-                String firstOwn = "0", secondOwn = "0", thirdOwn = "0", fourthOwn = "0";
-                String firstEnemy = "0", secondEnemy = "0", thirdEnemy = "0", fourthEnemy = "0";
-                try
-                {
-                    firstOwn = player1.remainShips[0].Size.ToString();
-                    secondOwn = player1.remainShips[1].Size.ToString();
-                    thirdOwn = player1.remainShips[2].Size.ToString();
-                    fourthOwn = player1.remainShips[3].Size.ToString();
+                if (i.X == (int)x && i.Y == (int)y)
+                    contains = true;
 
-                    firstEnemy = player2.remainShips[0].Size.ToString();
-                    secondEnemy = player2.remainShips[1].Size.ToString();
-                    thirdEnemy = player2.remainShips[2].Size.ToString();
-                    fourthEnemy = player2.remainShips[3].Size.ToString();
-
-                }
-                catch
-                {
-
-                }
-                ownShips.Text = firstOwn + " " + secondOwn + " " + thirdOwn + " " + fourthOwn;
-                enemyShips.Text = firstEnemy + " " + secondEnemy + " " + thirdEnemy + " " + fourthEnemy;
             }
-            if (hits1 == 11 || hits2 == 11)
-                GameWon();
+            if (!contains)
+            {
+                if (counter % 2 == 1)
+                {
+                    
+                    StartShooting(player2, player1, (int)x, (int)y);
+                    counter++;
+                    PrintingShootingBoard(player1, 1);
+                    PrintingShootingBoard(player2, 2);
+                    String firstOwn = "0", secondOwn = "0", thirdOwn = "0", fourthOwn = "0";
+                    String firstEnemy = "0", secondEnemy = "0", thirdEnemy = "0", fourthEnemy = "0";
+                    try
+                    {
+                        firstOwn = player1.remainShips[0].Size.ToString();
+                        secondOwn = player1.remainShips[1].Size.ToString();
+                        thirdOwn = player1.remainShips[2].Size.ToString();
+                        fourthOwn = player1.remainShips[3].Size.ToString();
+
+                        firstEnemy = player2.remainShips[0].Size.ToString();
+                        secondEnemy = player2.remainShips[1].Size.ToString();
+                        thirdEnemy = player2.remainShips[2].Size.ToString();
+                        fourthEnemy = player2.remainShips[3].Size.ToString();
+
+                    }
+                    catch
+                    {
+
+                    }
+                    ownShips.Text = firstOwn + " " + secondOwn + " " + thirdOwn + " " + fourthOwn;
+                    enemyShips.Text = firstEnemy + " " + secondEnemy + " " + thirdEnemy + " " + fourthEnemy;
+                }
+                if (hits1 == 11 || hits2 == 11)
+                    GameWon();
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

@@ -34,6 +34,7 @@ namespace Torpedo3
         List<Ship> ships;
         int[,] board;
         int presentTable;
+        List<Cell> alreadyShooted;
         private Cell _cell;
         String pName1 = "";
         int rounds = 0;
@@ -110,7 +111,7 @@ namespace Torpedo3
 
             botplace(bot);
 
-
+            alreadyShooted = new List<Cell>();
         }
 
         public void botplace(Bot player)
@@ -221,6 +222,7 @@ namespace Torpedo3
 
         public bool StartShooting(Player attacker, Bot defender, int x, int y)
         {
+            alreadyShooted.Add(new Cell(x, y));
             bool gameOver = false;
             Ship sankedShip = null;
             count.Text = " : " + ++rounds;
@@ -830,71 +832,81 @@ namespace Torpedo3
         {
             double x = e.GetPosition(playerCanvasS).X / 30;
             double y = e.GetPosition(playerCanvasS).Y / 30;
-            if (sizes.Length == counter)
+            bool contains = false;
+            foreach(var i in alreadyShooted)
             {
-                Random begin = new Random();
-                who = begin.Next(0, 2);
-                if (who == 1)
-                {
-                    StartShooting(player, bot, (int)x, (int)y);
-                    StartShooting(bot, player);
+                if (i.X == (int)x && i.Y == (int)y)
+                    contains = true;
 
-                    
-                }
-                else
-                {
-                    StartShooting(bot, player);
-                    StartShooting(player, bot, (int)x, (int)y);
-
-                }
-                PrintingShootingBoard(player);
-                PrintingShootingBoard(bot);
-                counter++;
             }
-            else
+            if (!contains)
             {
-                if (who == 1)
+                if (sizes.Length == counter)
                 {
-                    StartShooting(player, bot, (int)x, (int)y);
-                    StartShooting(bot, player);
+                    Random begin = new Random();
+                    who = begin.Next(0, 2);
+                    if (who == 1)
+                    {
+                        StartShooting(player, bot, (int)x, (int)y);
+                        StartShooting(bot, player);
 
+
+                    }
+                    else
+                    {
+                        StartShooting(bot, player);
+                        StartShooting(player, bot, (int)x, (int)y);
+
+                    }
+                    PrintingShootingBoard(player);
+                    PrintingShootingBoard(bot);
+                    counter++;
                 }
                 else
                 {
-                    StartShooting(bot, player);
-                    StartShooting(player, bot, (int)x, (int)y);
+                    if (who == 1)
+                    {
+                        StartShooting(player, bot, (int)x, (int)y);
+                        StartShooting(bot, player);
+
+                    }
+                    else
+                    {
+                        StartShooting(bot, player);
+                        StartShooting(player, bot, (int)x, (int)y);
+
+                    }
+                    counter++;
+                    PrintingShootingBoard(player);
+                    PrintingShootingBoard(bot);
+                    String firstOwn = "0", secondOwn = "0", thirdOwn = "0", fourthOwn = "0";
+                    String firstEnemy = "0", secondEnemy = "0", thirdEnemy = "0", fourthEnemy = "0";
+                    try
+                    {
+                        firstOwn = player.remainShips[0].Size.ToString();
+                        secondOwn = player.remainShips[1].Size.ToString();
+                        thirdOwn = player.remainShips[2].Size.ToString();
+                        fourthOwn = player.remainShips[3].Size.ToString();
+
+                        firstEnemy = bot.remainShips[0].Size.ToString();
+                        secondEnemy = bot.remainShips[1].Size.ToString();
+                        thirdEnemy = bot.remainShips[2].Size.ToString();
+                        fourthEnemy = bot.remainShips[3].Size.ToString();
+                    }
+                    catch
+                    {
+
+                    }
+                    ownShips.Text = firstOwn + " " + secondOwn + " " + thirdOwn + " " + fourthOwn;
+                    enemyShips.Text = firstEnemy + " " + secondEnemy + " " + thirdEnemy + " " + fourthEnemy;
+
+                    List<string> asd = new List<string>();
+                    if (hits1 == 11 || hits2 == 11)
+                    {
+                        GameWon();
+                    }
 
                 }
-                counter++;
-                PrintingShootingBoard(player);
-                PrintingShootingBoard(bot);
-                String firstOwn = "0", secondOwn = "0", thirdOwn = "0", fourthOwn = "0";
-                String firstEnemy = "0", secondEnemy = "0", thirdEnemy = "0", fourthEnemy = "0";
-                try
-                {
-                    firstOwn = player.remainShips[0].Size.ToString();
-                    secondOwn = player.remainShips[1].Size.ToString();
-                    thirdOwn = player.remainShips[2].Size.ToString();
-                    fourthOwn = player.remainShips[3].Size.ToString();
-
-                    firstEnemy = bot.remainShips[0].Size.ToString();
-                    secondEnemy = bot.remainShips[1].Size.ToString();
-                    thirdEnemy = bot.remainShips[2].Size.ToString();
-                    fourthEnemy = bot.remainShips[3].Size.ToString();
-                }
-                catch
-                {
-
-                }
-                ownShips.Text = firstOwn + " " + secondOwn + " " + thirdOwn + " " + fourthOwn;
-                enemyShips.Text = firstEnemy + " " + secondEnemy + " " + thirdEnemy + " " + fourthEnemy;
-
-                List<string> asd = new List<string>();
-                if(hits1 == 11 || hits2 == 11)
-                {
-                    GameWon();
-                }
-
             }
         }
 
@@ -929,7 +941,7 @@ namespace Torpedo3
             playerCanvas.Visibility = Visibility.Visible;
             botCanvas.Visibility = Visibility.Visible;
             BeginGame();
-            nameLabel.Text = player.Name + " hajói:";
+            nameLabel.Text = player.Name + " hajói:";          
         }
     }
 }
